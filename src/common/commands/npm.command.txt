@@ -1,0 +1,26 @@
+
+======== data basesql=====
+npm i mysql2 typeorm
+npm i @nestjs/typeorm
+
+========swagger=====
+npm install @nestjs/swagger swagger-ui-express
+
+http://localhost/phpmyadmin
+
+npm install bcryptjs
+npm install --save-dev @types/bcryptjs
+
+======== JWT ==========
+npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
+npm install -D @types/passport-jwt @types/bcrypt
+
+========multer========
+npm install @nestjs/platform-express multer
+npm install -D @types/multer
+
+=========nest config====
+npm install @nestjs/config
+
+========validation======
+ npm i class-validator class-transformer
