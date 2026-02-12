@@ -10,7 +10,4 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async findAll() {
-    return await this.prisma.post.findMany();
-  }
 }
