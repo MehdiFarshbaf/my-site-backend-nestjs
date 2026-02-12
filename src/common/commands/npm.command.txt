@@ -1,5 +1,5 @@
 
-======== data basesql=====
+======== data base sql=====
 npm i mysql2 typeorm
 npm i @nestjs/typeorm
 
