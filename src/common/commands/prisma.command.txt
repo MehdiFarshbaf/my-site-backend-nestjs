@@ -1,7 +1,7 @@
 npm install prisma --save-dev
 npm install nestjs-prisma
 npm install @prisma/adapter-pg pg
-
+npm install prisma@^6.0.0 @prisma/client@^6.0.0
 
 npm install @prisma/client@^5.22.0
 npm install prisma@^5.22.0 --save-dev

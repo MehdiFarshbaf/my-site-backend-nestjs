@@ -20,7 +20,7 @@ export function setupSwagger(app: INestApplication): void {
         customCss: '.swagger-ui .topbar { display: none }',
         swaggerOptions: {
             persistAuthorization: true,
-            docExpansion: 'none',
+            // docExpansion: 'none',
             filter: true,
             showRequestDuration: true,
         },

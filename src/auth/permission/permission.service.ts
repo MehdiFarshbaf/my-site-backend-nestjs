@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permmission.dto';
+import retryTimes = jest.retryTimes;
 
 @Injectable()
 export class PermissionService {
@@ -29,7 +30,7 @@ export class PermissionService {
     });
 
     if (existing) {
-      throw new ConflictException(`Permission با نام "${name}" قبلاً وجود دارد`);
+      throw new ConflictException(`مجوز با نام ${name} وجود دارد`);
     }
   }
 
@@ -46,14 +47,23 @@ export class PermissionService {
 
   async update(id: number, updatePermissionDto: UpdatePermissionDto) {
     await this.findOneOrFail(id);
-    return this.prisma.permission.update({
+    updatePermissionDto.name && await this.checkDuplicateName(updatePermissionDto.name);
+    const updatePermission = await this.prisma.permission.update({
       where: { id },
       data: updatePermissionDto,
     });
+    return {
+      message: 'ویرایش مجوز موفقیت آمیز بود.',
+      data: updatePermission,
+    };
   }
 
   async removePermission(id: number) {
     await this.findOneOrFail(id);
-    return this.prisma.permission.delete({ where: { id } });
+    const permission = await this.prisma.permission.delete({ where: { id } });
+    return {
+      data: permission,
+      message: 'حذف مجوز موفقیت آمیز بود.',
+    };
   }
 }
