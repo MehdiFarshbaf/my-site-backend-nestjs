@@ -3,9 +3,9 @@ import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreatePermissionDto {
   @ApiProperty({
-    example: 'create.user',
-    description: 'Unique permission identifier (e.g., resource.action)',
-    minLength: 3,
+    description: 'Unique name of the permission',
+    example: 'users.create',
+    minLength: 1,
   })
   @IsString({ message: 'Permission name must be a string' })
   @IsNotEmpty({ message: 'Permission name is required' })
@@ -13,11 +13,11 @@ export class CreatePermissionDto {
   name: string;
 
   @ApiPropertyOptional({
-    example: 'user',
-    description: 'Optional group/category for organizing permissions (e.g., user, post, admin)',
+    description: 'Optional group/category for the permission',
+    example: 'users',
   })
   @IsOptional()
-  @IsString({ message: 'Group must be a string' })
+  @IsString({ message: 'Permission group must be a string' })
     // @IsEnum(PermissionGroup, {
     //   message: `Group must be one of the following: ${Object.values(PermissionGroup).join(', ')}`,
     //   always: false, // فقط وقتی مقدار وجود دارد چک می‌کند
