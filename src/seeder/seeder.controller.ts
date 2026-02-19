@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { SeederService } from './seeder.service';
-import { CreateSeederDto } from './dto/create-seeder.dto';
-import { UpdateSeederDto } from './dto/update-seeder.dto';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('seeder')
 export class SeederController {
-  constructor(private readonly seederService: SeederService) {}
-
-  @Post()
-  create(@Body() createSeederDto: CreateSeederDto) {
-    return this.seederService.create(createSeederDto);
+  constructor(private readonly seederService: SeederService) {
   }
 
-  @Get()
-  findAll() {
-    return this.seederService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.seederService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSeederDto: UpdateSeederDto) {
-    return this.seederService.update(+id, updateSeederDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.seederService.remove(+id);
+  @ApiOperation({ summary: 'create seeder' })
+  @Get('seeder_permissions_and_roles')
+  @HttpCode(HttpStatus.OK)
+  async seederPermissionsAndRoles() {
+    await this.seederService.seedPermissions();
+    await this.seederService.seedRoles();
+    return {
+      message: 'Seeder permissions and role created successfully.',
+    };
   }
 }

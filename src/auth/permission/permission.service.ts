@@ -2,7 +2,6 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permmission.dto';
-import retryTimes = jest.retryTimes;
 
 @Injectable()
 export class PermissionService {
@@ -60,10 +59,6 @@ export class PermissionService {
 
   async removePermission(id: number) {
     await this.findOneOrFail(id);
-    const permission = await this.prisma.permission.delete({ where: { id } });
-    return {
-      data: permission,
-      message: 'حذف مجوز موفقیت آمیز بود.',
-    };
+    return this.prisma.permission.delete({ where: { id } });
   }
 }

@@ -38,7 +38,11 @@ export class RoleController {
     description: 'Invalid permission IDs provided.',
   })
   async create(@Body() createRoleDto: CreateRoleDto) {
-    return this.roleService.create(createRoleDto);
+    const newRole = await this.roleService.create(createRoleDto);
+    return {
+      message: `نقش ${newRole.name} با موفقیت ایجاد شد.`,
+      data: newRole,
+    };
   }
 
   @Get()
@@ -105,7 +109,7 @@ export class RoleController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete a role' })
   @ApiParam({
     name: 'id',
@@ -121,8 +125,12 @@ export class RoleController {
     status: 404,
     description: 'Role not found.',
   })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.roleService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const role = await this.roleService.remove(id);
+    return {
+      message: `نقش ${role.name} با موفقیت حذف شد.`,
+      data: role,
+    };
   }
 
 }

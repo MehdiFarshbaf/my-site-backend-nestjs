@@ -82,7 +82,7 @@ export class PermissionController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete a permission' })
   @ApiParam({
     name: 'id',
@@ -99,7 +99,11 @@ export class PermissionController {
     description: 'Permission not found.',
   })
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.permissionService.removePermission(id);
+    const permission = await this.permissionService.removePermission(id);
+    return {
+      message: 'حذف مجوز موفقیت آمیز بود.',
+      data: permission,
+    };
   }
 
 }

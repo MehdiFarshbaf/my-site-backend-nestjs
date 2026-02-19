@@ -1,26 +1,68 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSeederDto } from './dto/create-seeder.dto';
-import { UpdateSeederDto } from './dto/update-seeder.dto';
+import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../prisma/prisma.service';
+import { seederDataPermissions } from './data/seederDataPermissions';
 
 @Injectable()
 export class SeederService {
-  create(createSeederDto: CreateSeederDto) {
-    return 'This action adds a new seeder';
+  constructor(private configService: ConfigService, private readonly prisma: PrismaService) {
   }
 
-  findAll() {
-    return `This action returns all seeder`;
+  async seedPermissions() {
+
+    await Promise.all(
+      seederDataPermissions.map(async (permission) => {
+        const checkPermission = await this.prisma.permission.findUnique({
+          where: { name: permission.name },
+        });
+
+        if (!checkPermission) {
+          await this.prisma.permission.create({ data: permission });
+          console.log(`✅ Permission "${permission.name}" created`);
+        }
+      }),
+    );
+
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} seeder`;
-  }
+  async seedRoles() {
+    const ROLE_SUPER_ADMIN = this.configService.get<string>('ROLE_SUPER_ADMIN') || 'super_admin';
 
-  update(id: number, updateSeederDto: UpdateSeederDto) {
-    return `This action updates a #${id} seeder`;
-  }
+    // Get all permissions
+    const permissions = await this.prisma.permission.findMany();
 
-  remove(id: number) {
-    return `This action removes a #${id} seeder`;
+    // Check if a super admin role already exists
+    const existingRole = await this.prisma.role.findUnique({
+      where: { name: ROLE_SUPER_ADMIN },
+      include: { permissions: true },
+    });
+
+    if (!existingRole) {
+      // Create a super admin role with all permissions
+      await this.prisma.role.create({
+        data: {
+          name: ROLE_SUPER_ADMIN,
+          permissions: {
+            connect: permissions.map(permission => ({ id: permission.id })),
+          },
+        },
+        include: { permissions: true },
+      });
+      console.log(`✅ Role "${ROLE_SUPER_ADMIN}" created with ${permissions.length} permissions`);
+    } else {
+      // Update an existing role to ensure it has all permissions
+      await this.prisma.role.update({
+        where: { id: existingRole.id },
+        data: {
+          permissions: {
+            set: permissions.map(permission => ({ id: permission.id })),
+          },
+        },
+        include: { permissions: true },
+      });
+      console.log(`✅ Role "${ROLE_SUPER_ADMIN}" updated with ${permissions.length} permissions`);
+    }
+
+
   }
 }
