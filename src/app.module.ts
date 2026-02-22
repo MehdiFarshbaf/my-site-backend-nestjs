@@ -8,6 +8,8 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { SeederModule } from './seeder/seeder.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -16,8 +18,10 @@ import { SeederModule } from './seeder/seeder.module';
       envFilePath: '.env',
     }),
     PrismaModule,
+    ScheduleModule.forRoot(),
     AuthModule,
     SeederModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService,
