@@ -10,6 +10,6 @@ export class TasksService {
   // @Cron(CronExpression.EVERY_10_MINUTES)
   @Cron('*/10 * * * * *')
   cleanOtpData() {
-    this.cleanUp.cleanOtpFromDatabase();
+    // this.cleanUp.cleanOtpFromDatabase();
   }
 }

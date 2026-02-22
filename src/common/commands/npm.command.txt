@@ -8,8 +8,8 @@ npm install @nestjs/swagger swagger-ui-express
 
 http://localhost/phpmyadmin
 
-npm install bcryptjs
-npm install --save-dev @types/bcryptjs
+npm install bcrypt
+npm install -D @types/bcrypt
 
 ======== JWT ==========
 npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
