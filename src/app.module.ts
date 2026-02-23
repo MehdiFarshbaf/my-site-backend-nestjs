@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { SeederModule } from './seeder/seeder.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
+import { BullModule } from '@nestjs/bull';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   imports: [
@@ -19,9 +21,16 @@ import { TasksModule } from './tasks/tasks.module';
     }),
     PrismaModule,
     ScheduleModule.forRoot(),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     AuthModule,
     SeederModule,
     TasksModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [AppService,
